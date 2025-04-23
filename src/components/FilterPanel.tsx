@@ -23,7 +23,7 @@ export interface FilterState {
   dateRange: [Date | null, Date | null];
 }
 
-const FilterPanel: React.FC<{ onFilterChange: (filters: FilterState) => void }> = ({ onFilterChange }) => {
+const FilterPanel = () => {
   // const [filters, setFilters] = useState<FilterState>({
   //   sector: [],
   //   category: [],

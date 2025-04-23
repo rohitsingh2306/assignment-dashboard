@@ -32,7 +32,7 @@ const DataTable: React.FC<Props> = ({ data,selectedAttributes }) => {
     console.log("filters",filters)
 
     const filteredData = data.filter((item) => {
-      const { countries, states, sectors, categories ,dateRange } = filters;
+      const { countries, states, sectors, categories  } = filters;
       const [startDate, endDate] = filters.dateRange;
 
     const itemStartDate = new Date(item.startDate);
