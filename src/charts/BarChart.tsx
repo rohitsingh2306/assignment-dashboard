@@ -26,7 +26,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, selectedAttributes }) => {
   const activeAttributes = selectedAttributes.length > 0 ? selectedAttributes : allAttributeLabels;
   const keys = activeAttributes.map(attr => attributeKeyMap[attr]);
 
-  const filteredData = filters.categories
+  const filteredData = filters?.categories
     ? data.filter(item => item.category === filters.categories)
     : data;
 
