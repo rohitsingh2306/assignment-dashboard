@@ -3,7 +3,7 @@ import FilterPanel, { FilterState } from '../components/FilterPanel';
 import { Box, Typography } from '@mui/material';
 import DataTable from './DataTable';  // Placeholder component for the data table
 import BarChart from '../charts/BarChart';    // Placeholder component for the bar chart
-import { useDispatch, useSelector } from 'react-redux'
+import {  useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 
 const MetricsView: React.FC<{ selectedUser: any | null }> = ({ selectedUser }) => {
