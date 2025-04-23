@@ -26,9 +26,17 @@ const BarChart: React.FC<BarChartProps> = ({ data, selectedAttributes }) => {
   const activeAttributes = selectedAttributes.length > 0 ? selectedAttributes : allAttributeLabels;
   const keys = activeAttributes.map(attr => attributeKeyMap[attr]);
 
-  const filteredData = filters?.categories
-    ? data.filter(item => item.category === filters.categories)
-    : data;
+  // const filteredData = filters?.categories
+  //   ? data.filter(item => item.category === filters.categories)
+  //   : data;
+
+  const filteredData = data.filter(item => {
+    if (filters?.categories && item.category !== filters.categories) return false;
+    if (filters?.countries && item.country !== filters.countries) return false;
+    if (filters?.states && item.state !== filters.states) return false;
+    if (filters?.sectors && item.sector !== filters.sectors) return false;
+    return true;
+  });
 
   const chartData = filteredData.reduce((acc: any[], item) => {
     let existing = acc.find(d => d.category === item.category);
