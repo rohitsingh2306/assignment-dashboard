@@ -9,6 +9,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import { mockUsers, User } from '../data/mockUser';
+import {useUserChange} from "../mixins/useUserChange"
 
 
 
@@ -31,6 +32,7 @@ const style = {
 };
 
 const UserModal: React.FC<UserModalProps> = ({ open, onClose, onSelectUser }) => {
+  const {handleUserChange} =useUserChange()
   return (
     <Modal open={open} onClose={onClose}>
       <Box sx={style}>
@@ -41,6 +43,8 @@ const UserModal: React.FC<UserModalProps> = ({ open, onClose, onSelectUser }) =>
               <ListItemButton onClick={() => {
                 onSelectUser(user);
                 onClose();
+                handleUserChange(user.id)
+               
               }}>
                 <ListItemText primary={user.name} secondary={user.email} />
               </ListItemButton>

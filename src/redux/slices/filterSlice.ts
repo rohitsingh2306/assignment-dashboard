@@ -203,8 +203,10 @@ const filterSlice = createSlice({
       state.dateRange = action.payload
     },
     setAttributeChange(state, action: PayloadAction<string[]>) {
-        console.log("hhhh",action.payload)
         state.attributeSelected = action.payload; // Correctly assign the payload to the state
+      },
+      setData(state,action){
+        state.data.data = action.payload
       },
     clearFilters(state) {
       state.countries = ""
@@ -360,6 +362,7 @@ export const {
   setCategories,
   setDateRange,
   clearFilters,
+  setData,
  setAttributeChange
 } = filterSlice.actions
 

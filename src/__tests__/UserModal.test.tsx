@@ -3,6 +3,18 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import UserModal from '../components/UserModal';
 import { mockUsers } from '../data/mockUser';
 
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(() => ({ categories: null })), // Default behavior, no filter
+  useDispatch :jest.fn(() => ({ categories: null })), // Default behavior, no filter
+}));
+
+jest.mock('../mixins/useUserChange', () => ({
+  useUserChange: () => ({
+    handleUserChange: jest.fn(),
+  }),
+}));
+
+
 describe('UserModal Component', () => {
   const onClose = jest.fn();
   const onSelectUser = jest.fn();
