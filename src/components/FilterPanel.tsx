@@ -1,11 +1,11 @@
-import React  from 'react';
-import { Box, MenuItem, Select, FormControl, InputLabel, Button } from '@mui/material';
+import React from 'react';
+import { Box, MenuItem, Select, FormControl, InputLabel, Button, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DateRangePicker } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
-import dayjs from 'dayjs'; // Add this import
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import dayjs from 'dayjs';
 import {
   setCountries,
   setStates,
@@ -14,146 +14,104 @@ import {
   setDateRange,
   setAttributeChange,
   clearFilters
-} from "../redux/slices/filterSlice"
+} from "../redux/slices/filterSlice";
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 
-export interface FilterState {
-  sector: string[];
-  category: string[];
-  dateRange: [Date | null, Date | null];
-}
-
 const FilterPanel = () => {
-  // const [filters, setFilters] = useState<FilterState>({
-  //   sector: [],
-  //   category: [],
-  //   dateRange: [null, null],
-  // });
+  const dispatch = useDispatch();
+  const filters = useSelector((state: RootState) => state.filter);
 
-  // const handleSectorChange = (event: any) => {
-  //   setFilters({ ...filters, sector: event.target.value });
-  // };
+  const currentDate = dayjs();
+  const minDate = currentDate.subtract(14, 'months');
+  const maxDate = currentDate;
 
-  // const handleCategoryChange = (event: any) => {
-  //   setFilters({ ...filters, category: event.target.value });
-  // };
+  const handleCountryChange = (e: any) => {
+    dispatch(setCountries(e.target.value));
+  };
 
-  // const handleDateChange = (dates: [Date | null, Date | null]) => {
-  //   setFilters({ ...filters, dateRange: dates });
-  // };
+  const handleStateChange = (e: any) => {
+    dispatch(setStates(e.target.value));
+  };
 
-  const dispatch = useDispatch()
-const filters = useSelector((state: RootState) => state.filter)
+  const handleSectorChange = (e: any) => {
+    dispatch(setSectors(e.target.value));
+  };
 
-const currentDate = dayjs(); // current date
-const minDate = currentDate.subtract(14, 'months'); // 12 months ago
-const maxDate = currentDate; // Today (can't select future dates)
+  const handleCategoryChange = (e: any) => {
+    dispatch(setCategories(e.target.value));
+  };
 
-//console.log("filters",filters)
+  const handleDateRangeChange = (newRange: any) => {
+    dispatch(setDateRange(newRange));
+  };
 
-const handleCountryChange = (e:any) => {
-  dispatch(setCountries(e.target.value))
-}
-
-const handleStateChange = (e:any) => {
-  dispatch(setStates(e.target.value))
-}
-
-const handleSectorChange = (e:any) => {
-  dispatch(setSectors(e.target.value))
-}
-
-const handleCategoryChange = (e:any) => {
-  dispatch(setCategories(e.target.value))
-}
-
-const handleDateRangeChange = (newRange:any) => {
-  dispatch(setDateRange(newRange))
-}
-
-const handleAttributeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-  const selectedAttributes = event.target.value as string[];  // Type it as a string array
-  dispatch(setAttributeChange(selectedAttributes));
-};
-
-  // const applyFilters = () => {
-  //   onFilterChange(filters); // Pass the updated filters to the parent
-  // };
+  const handleAttributeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const selectedAttributes = event.target.value as string[];
+    dispatch(setAttributeChange(selectedAttributes));
+  };
 
   return (
-    <Box>
-         {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateRangePicker
-               // value={value}
-                // onChange={(newValue) => {
-                //     setValue(newValue as DateRangePickerValueType);
-                // }}
-                // renderInput={(params: TextFieldProps) => (
-                //     <TextField {...params} />
-                // )}
-            />
-        </LocalizationProvider> */}
-       <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateRangePicker
-        value={filters.dateRange}
-        onChange={(newValue) => handleDateRangeChange(newValue)}
-        calendars={1}
-        minDate={minDate}  // Disable dates before 12 months ago
-        maxDate={maxDate}  // Disable future dates
-        slotProps={{
-          textField: {
-            fullWidth: true,
-            margin: 'normal',
-          },
-        }}
-      />
-    </LocalizationProvider>
-        <FormControl fullWidth margin="normal">
+    <Box
+      sx={{
+        border: '1px solid #e0e0e0',
+        borderRadius: 2,
+        padding: 3,
+        backgroundColor: '#fafafa',
+        boxShadow: 2,
+        maxWidth: 500,
+        margin: 'auto',
+        mt: 4
+      }}
+    >
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+        Filters
+      </Typography>
+
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DateRangePicker
+          value={filters.dateRange}
+          onChange={(newValue) => handleDateRangeChange(newValue)}
+          calendars={1}
+          minDate={minDate}
+          maxDate={maxDate}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              margin: 'normal',
+              size: 'small'
+            }
+          }}
+        />
+      </LocalizationProvider>
+
+      <FormControl fullWidth margin="normal" size="small">
         <InputLabel>Country</InputLabel>
-        <Select
-          
-          value={filters.countries}
-          onChange={handleCountryChange}
-          label="Country"
-        >
+        <Select value={filters.countries} onChange={handleCountryChange} label="Country">
           <MenuItem value="India">India</MenuItem>
           <MenuItem value="USA">USA</MenuItem>
         </Select>
       </FormControl>
-      <FormControl fullWidth margin="normal">
+
+      <FormControl fullWidth margin="normal" size="small">
         <InputLabel>State</InputLabel>
-        <Select
-          
-          value={filters.states}
-          onChange={handleStateChange}
-          label="State"
-        >
+        <Select value={filters.states} onChange={handleStateChange} label="State">
           <MenuItem value="Maharashtra">Maharashtra</MenuItem>
           <MenuItem value="Karnataka">Karnataka</MenuItem>
         </Select>
       </FormControl>
-      <FormControl fullWidth margin="normal">
+
+      <FormControl fullWidth margin="normal" size="small">
         <InputLabel>Sector</InputLabel>
-        <Select
-          
-          value={filters.sectors}
-          onChange={handleSectorChange}
-          label="Sector"
-        >
+        <Select value={filters.sectors} onChange={handleSectorChange} label="Sector">
           <MenuItem value="Retail">Retail</MenuItem>
           <MenuItem value="Food">Food</MenuItem>
           <MenuItem value="Industrial">Industrial</MenuItem>
         </Select>
       </FormControl>
 
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth margin="normal" size="small">
         <InputLabel>Category</InputLabel>
-        <Select
-          
-          value={filters.categories}
-          onChange={handleCategoryChange}
-          label="Category"
-        >
+        <Select value={filters.categories} onChange={handleCategoryChange} label="Category">
           <MenuItem value="Juice">Juice</MenuItem>
           <MenuItem value="Snacks">Snacks</MenuItem>
           <MenuItem value="Frozen Foods">Frozen Foods</MenuItem>
@@ -161,33 +119,34 @@ const handleAttributeChange = (event: React.ChangeEvent<{ value: unknown }>) => 
         </Select>
       </FormControl>
 
-      <FormControl fullWidth margin="normal">
+      <FormControl fullWidth margin="normal" size="small">
         <InputLabel>Attribute Selector</InputLabel>
         <Select
-  multiple
-  value={filters.attributeSelected}
-  onChange={(event:any) => handleAttributeChange(event)}
-  label="Category"
->
-  <MenuItem value="My Spend">My Spend</MenuItem>
-  <MenuItem value="Same Store Spend">Same Store Spend</MenuItem>
-  <MenuItem value="New Store Spend">New Store Spend</MenuItem>
-  <MenuItem value="Lost Store Spend">Lost Store Spend</MenuItem>
-</Select>
+          multiple
+          value={filters.attributeSelected}
+          onChange={(event: any) => handleAttributeChange(event)}
+          label="Attribute Selector"
+        >
+          <MenuItem value="My Spend">My Spend</MenuItem>
+          <MenuItem value="Same Store Spend">Same Store Spend</MenuItem>
+          <MenuItem value="New Store Spend">New Store Spend</MenuItem>
+          <MenuItem value="Lost Store Spend">Lost Store Spend</MenuItem>
+        </Select>
       </FormControl>
-      <Button
-      variant="outlined"
-      color="secondary"
-      startIcon={<ClearAllIcon />}
-      onClick={()=>dispatch(clearFilters())}
-    >
-      Clear All
-    </Button>
 
-      {/* Date picker component (simple placeholder for now) */}
-      {/* <Button onClick={applyFilters} variant="contained">Apply Filters</Button> */}
+      <Box sx={{ textAlign: 'right', mt: 2 }}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          startIcon={<ClearAllIcon />}
+          onClick={() => dispatch(clearFilters())}
+        >
+          Clear All
+        </Button>
+      </Box>
     </Box>
   );
 };
 
 export default FilterPanel;
+
